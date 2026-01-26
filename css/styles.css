@@ -1,14 +1,15 @@
 /* ========================================
-   SAFFIR GROUP - Modern Website Styles
+   SAFFIR & ZARRIN - Cotton & Trading Website
    ======================================== */
 
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --primary-light: #3b82f6;
+    --primary: #16a34a;
+    --primary-dark: #15803d;
+    --primary-light: #22c55e;
     --secondary: #0f172a;
-    --accent: #06b6d4;
-    --gold: #f59e0b;
+    --accent: #f59e0b;
+    --gold: #eab308;
+    --cotton: #fef3c7;
     --success: #10b981;
     --text: #1e293b;
     --text-light: #64748b;
@@ -117,15 +118,7 @@ body {
 }
 
 .logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
+    font-size: 1.75rem;
 }
 
 .nav-menu {
@@ -144,7 +137,7 @@ body {
 
 .nav-link:hover, .nav-link.active {
     color: var(--primary);
-    background: rgba(37, 99, 235, 0.08);
+    background: rgba(22, 163, 74, 0.08);
 }
 
 .nav-actions {
@@ -212,7 +205,7 @@ body {
 .hero-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%, #fef3c7 70%, #fef9c3 100%);
 }
 
 .hero-shapes {
@@ -230,7 +223,7 @@ body {
 .shape-1 {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(22, 163, 74, 0.15) 0%, transparent 70%);
     top: -200px;
     right: -100px;
     animation: float 8s ease-in-out infinite;
@@ -239,7 +232,7 @@ body {
 .shape-2 {
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
     bottom: -100px;
     left: -100px;
     animation: float 6s ease-in-out infinite reverse;
@@ -248,10 +241,26 @@ body {
 .shape-3 {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(254, 243, 199, 0.5) 0%, transparent 70%);
     top: 50%;
     left: 50%;
     animation: float 10s ease-in-out infinite;
+}
+
+.cotton-float {
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0.3;
+    animation: cottonFloat 15s ease-in-out infinite;
+}
+
+.cotton-1 { top: 20%; left: 10%; animation-delay: 0s; }
+.cotton-2 { top: 60%; right: 15%; animation-delay: -5s; }
+.cotton-3 { top: 40%; left: 60%; animation-delay: -10s; }
+
+@keyframes cottonFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(10deg); }
 }
 
 @keyframes float {
@@ -274,7 +283,7 @@ body {
 .hero-badge {
     display: inline-block;
     padding: 8px 16px;
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(22, 163, 74, 0.1);
     color: var(--primary);
     font-weight: 600;
     font-size: 0.875rem;
@@ -337,7 +346,7 @@ body {
     background: var(--primary-dark);
     border-color: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3);
 }
 
 .btn-outline {
@@ -368,30 +377,31 @@ body {
 .company-mini-card {
     position: absolute;
     background: white;
-    padding: 30px;
+    padding: 24px 30px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     display: flex;
     align-items: center;
     gap: 15px;
-    font-weight: 600;
     transition: var(--transition);
 }
 
 .company-mini-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.02);
 }
 
 .card-1 {
     top: 20px;
-    left: 10%;
+    left: 5%;
     animation: cardFloat1 4s ease-in-out infinite;
+    border-left: 4px solid var(--primary);
 }
 
 .card-2 {
     bottom: 20px;
-    right: 10%;
+    right: 5%;
     animation: cardFloat2 4s ease-in-out infinite;
+    border-left: 4px solid var(--accent);
 }
 
 @keyframes cardFloat1 {
@@ -405,15 +415,38 @@ body {
 }
 
 .mini-icon {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    border-radius: 12px;
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+}
+
+.card-1 .mini-icon {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+.card-2 .mini-icon {
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+}
+
+.mini-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.mini-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.mini-sub {
+    font-size: 0.875rem;
+    color: var(--text-light);
 }
 
 .scroll-indicator {
@@ -473,7 +506,7 @@ section {
 .section-badge {
     display: inline-block;
     padding: 6px 14px;
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(22, 163, 74, 0.1);
     color: var(--primary);
     font-weight: 600;
     font-size: 0.875rem;
@@ -585,7 +618,7 @@ section {
 .stat-item i {
     width: 50px;
     height: 50px;
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(22, 163, 74, 0.1);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -654,7 +687,7 @@ section {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
     transform: scaleX(0);
     transition: var(--transition);
 }
@@ -669,10 +702,11 @@ section {
 }
 
 .company-card.featured {
-    border-color: var(--primary);
+    border-color: var(--accent);
 }
 
 .company-card.featured::before {
+    background: linear-gradient(90deg, var(--accent), var(--gold));
     transform: scaleX(1);
 }
 
@@ -684,32 +718,57 @@ section {
 }
 
 .company-logo {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    border-radius: 14px;
+    width: 65px;
+    height: 65px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-weight: 800;
-    font-size: 1.25rem;
+    font-size: 1.75rem;
+}
+
+.saffir-logo {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+.zarrin-logo {
+    background: linear-gradient(135deg, var(--accent), var(--gold));
 }
 
 .company-badge {
     padding: 6px 12px;
-    background: rgba(37, 99, 235, 0.1);
-    color: var(--primary);
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 6px;
     text-transform: uppercase;
 }
 
+.company-badge.green {
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--primary);
+}
+
+.company-badge.gold {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent);
+}
+
 .company-name {
     font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
+}
+
+.company-tagline {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+}
+
+.company-card.featured .company-tagline {
+    color: var(--accent);
 }
 
 .company-desc {
@@ -720,7 +779,7 @@ section {
 
 .company-features {
     display: grid;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 24px;
 }
 
@@ -729,15 +788,17 @@ section {
     align-items: center;
     gap: 10px;
     color: var(--text);
+    font-size: 0.95rem;
 }
 
 .feature i {
     color: var(--success);
+    font-size: 0.9rem;
 }
 
 .company-stats-mini {
     display: flex;
-    gap: 30px;
+    gap: 25px;
     padding-top: 20px;
     border-top: 1px solid var(--border);
 }
@@ -748,19 +809,103 @@ section {
 
 .mini-num {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--primary);
 }
 
+.company-card.featured .mini-num {
+    color: var(--accent);
+}
+
 .mini-label {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--text-light);
+}
+
+/* ========== PROCESS ========== */
+.process {
+    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.process-timeline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.process-step {
+    flex: 1;
+    min-width: 180px;
+    max-width: 200px;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+}
+
+.step-icon {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border: 3px solid var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 1.75rem;
+    color: var(--primary);
+    position: relative;
+    z-index: 2;
+    transition: var(--transition);
+}
+
+.process-step:hover .step-icon {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+.step-number {
+    position: absolute;
+    top: 15px;
+    right: 25%;
+    background: var(--accent);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 20px;
+    z-index: 3;
+}
+
+.process-step h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.process-step p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+.process-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    margin-top: 55px;
+    border-radius: 2px;
+    flex-shrink: 0;
 }
 
 /* ========== STATS ========== */
 .stats {
-    background: linear-gradient(135deg, var(--secondary) 0%, #1e3a5f 100%);
+    background: linear-gradient(135deg, #0f4a0f 0%, #1e3a1e 50%, #2d4a2d 100%);
     color: white;
 }
 
@@ -772,7 +917,7 @@ section {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: var(--radius);
     padding: 30px;
     text-align: center;
@@ -781,14 +926,14 @@ section {
 }
 
 .stat-card:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     transform: translateY(-5px);
 }
 
 .stat-icon {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -825,7 +970,7 @@ section {
 
 .stat-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
+    background: linear-gradient(90deg, var(--primary-light), var(--accent));
     border-radius: 2px;
     transition: width 1s ease;
 }
@@ -838,7 +983,7 @@ section {
 }
 
 .chart-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: var(--radius);
     padding: 30px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -857,7 +1002,7 @@ section {
 
 .bar-item {
     display: grid;
-    grid-template-columns: 50px 1fr 50px;
+    grid-template-columns: 50px 1fr 70px;
     gap: 12px;
     align-items: center;
 }
@@ -868,22 +1013,22 @@ section {
 }
 
 .bar-track {
-    height: 10px;
+    height: 12px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
+    border-radius: 6px;
     overflow: hidden;
 }
 
 .bar-value {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    border-radius: 5px;
+    background: linear-gradient(90deg, var(--primary-light), var(--accent));
+    border-radius: 6px;
     transition: width 1s ease;
 }
 
 .bar-percent {
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--accent);
 }
 
@@ -903,10 +1048,10 @@ section {
     stroke-width: 20;
 }
 
-.seg-1 { stroke: var(--primary); }
+.seg-1 { stroke: var(--primary-light); }
 .seg-2 { stroke: var(--accent); }
-.seg-3 { stroke: var(--gold); }
-.seg-4 { stroke: var(--success); }
+.seg-3 { stroke: #60a5fa; }
+.seg-4 { stroke: #a78bfa; }
 
 .donut-center {
     position: absolute;
@@ -937,10 +1082,10 @@ section {
     border-radius: 3px;
 }
 
-.dot-1 { background: var(--primary); }
+.dot-1 { background: var(--primary-light); }
 .dot-2 { background: var(--accent); }
-.dot-3 { background: var(--gold); }
-.dot-4 { background: var(--success); }
+.dot-3 { background: #60a5fa; }
+.dot-4 { background: #a78bfa; }
 
 /* ========== CONTACT ========== */
 .contact {
@@ -971,7 +1116,7 @@ section {
 .info-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -1190,6 +1335,17 @@ section {
 
     .companies-grid {
         grid-template-columns: 1fr;
+    }
+
+    .process-timeline {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .process-line {
+        width: 3px;
+        height: 40px;
+        margin: 0;
     }
 
     .stats-grid {
