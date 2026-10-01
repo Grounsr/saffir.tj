@@ -825,7 +825,11 @@
     gl.uniform3fv(loc.uC2, pal.c2);
 
     // hero fade-in on first load and a gentle dim on small screens behind text
-    var alpha = pl.a * pal.gain * (narrow ? 0.7 : 1) * intro;
+    // on phones the shape sits behind body copy: full strength in the hero, softer below
+    var heroK = Math.max(0, Math.min(1, 1 - smoothY / H));
+    // mid-morph the fibers spread over the copy, so they thin out on phones
+    var morphDim = narrow ? 1 - 0.45 * Math.sin(t * Math.PI) : 1;
+    var alpha = pl.a * pal.gain * (narrow ? lerp(0.45, 0.8, heroK) : 1) * morphDim * intro;
     gl.uniform1f(loc.uAlpha, alpha);
     gl.uniform1f(loc.uSize, (narrow ? 34 : 40) * dpr * Math.sqrt(H / 900) * (lowPower ? 1.15 : 1));
     gl.uniform1f(loc.uCamZ, CAMZ);

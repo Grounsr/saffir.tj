@@ -225,7 +225,8 @@
       if (!reduceMotion) {
         var rect = R.el.getBoundingClientRect();
         if (rect.bottom < -vh || rect.top > vh * 2) continue;
-        var target = clamp((vh - rect.top) / (vh * 0.55), 0, 1);
+        // phones: finish the reveal sooner so text isn't half-faded mid-screen
+        var target = clamp((vh - rect.top) / (vh * (innerWidth < 768 ? 0.3 : 0.55)), 0, 1);
         R.q = lerp(R.q, target, k);
         if (Math.abs(R.q - target) < 0.001) R.q = target;
       }

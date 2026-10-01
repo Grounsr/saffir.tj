@@ -1875,6 +1875,52 @@ main, .footer { position: relative; z-index: 1; }
   .depth-window { height: 48vh; }
   /* translucent cards need more body behind text on small screens */
   .brand-card, .region-card, .process-step, .contact-form, .contact-item { background: var(--glass-bg-strong); }
+
+  /* Header: smaller logos + always-visible EN/RU switch */
+  .nav-logos { gap: var(--space-2); }
+  .nav-logos img { height: 34px; }
+  .nav-right { gap: var(--space-2); }
+  .lang-switch { display: flex; }
+  .lang-btn { min-width: 38px; min-height: 34px; padding: 0 var(--space-2); }
+  .mobile-menu-btn { margin-right: calc(var(--space-2) * -1); }
+
+  /* Hero buttons: full width, easy to hit with a thumb */
+  .hero-ctas { flex-direction: column; gap: var(--space-3); }
+  .hero-ctas .btn { justify-content: center; min-height: 52px; font-size: var(--text-base); }
+
+  /* Blur over an animated WebGL canvas re-renders every frame; the
+     cards are already near-opaque here, so drop it for smooth scrolling */
+  .brand-card, .region-card, .process-step, .contact-form, .contact-item,
+  .glass, .btn-outline, .cert-item {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .nav.scrolled {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: oklch(from var(--color-bg) l c h / 0.94);
+  }
+
+  /* Body copy stays legible over the particles */
+  [data-theme="dark"] .section-desc { text-shadow: 0 1px 14px var(--color-bg), 0 0 2px var(--color-bg); }
+
+  /* Shorter pinned scenes: less thumb-scrolling per slide */
+  .process-track { height: 320vh; }
+  .process-marker { height: 80vh; }
+  .process-marker:nth-child(2) { top: 80vh; }
+  .process-marker:nth-child(3) { top: 160vh; }
+  .process-marker:nth-child(4) { top: 240vh; }
+  /* slides rotating out no longer slide over the heading */
+  .process-drum { clip-path: inset(0 -24px); }
+  .gallery-track { height: 240vh; }
+
+  /* Footer links: comfortable tap targets */
+  .footer-col a { padding: 10px 0; }
+}
+
+/* Very narrow phones: keep the header on one line */
+@media (max-width: 350px) {
+  .nav-brand { display: none; }
 }
 
 /* Particles sit behind the process copy on narrow screens */
