@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,12 @@
   <meta property="og:description" content="From cotton fields to finished fiber. BCI & GOTS certified cotton production and trade.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.saffir.tj">
+  <meta name="theme-color" content="#0B0C0A">
+
+  <!-- Theme before paint (saved choice, default dark) -->
+  <script>
+    try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  </script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,12 +31,17 @@
 </head>
 <body>
 
+  <!-- 3D cotton-fiber scene (decorative) -->
+  <canvas id="fiber-canvas" aria-hidden="true"></canvas>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
   <!-- ==================== NAVIGATION ==================== -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <div class="nav-logos">
-        <img src="./assets/images/saffir-logo.png" alt="Saffir Logo" width="40" height="40">
-        <img src="./assets/images/zarrin-logo.png" alt="Zarrin Logo" width="40" height="40">
+        <img src="./assets/images/web/saffir-logo.png" alt="Saffir Logo" width="40" height="40">
+        <img src="./assets/images/web/zarrin-logo.png" alt="Zarrin Logo" width="40" height="40">
         <a href="#" class="nav-brand">Saffir <span class="nav-brand-amp">&</span> Zarrin</a>
       </div>
 
@@ -64,8 +75,8 @@
     <div class="mobile-menu-panel">
       <div class="mobile-menu-header">
         <div class="mobile-menu-brand">
-          <img src="./assets/images/saffir-logo.png" alt="Saffir" width="36" height="36">
-          <img src="./assets/images/zarrin-logo.png" alt="Zarrin" width="36" height="36">
+          <img src="./assets/images/web/saffir-logo.png" alt="Saffir" width="36" height="36">
+          <img src="./assets/images/web/zarrin-logo.png" alt="Zarrin" width="36" height="36">
           <span>Saffir & Zarrin</span>
         </div>
         <button class="mobile-menu-close" onclick="document.getElementById('mobileMenu').classList.remove('open')" aria-label="Close menu">
@@ -103,12 +114,14 @@
     </div>
   </div>
 
+  <main>
+
   <!-- ==================== HERO ==================== -->
-  <section class="hero" id="hero">
-    <div class="hero-bg">
-      <img src="./assets/images/cotton-field-rows.jpg" alt="Cotton fields in Tajikistan" loading="eager">
+  <section class="hero" id="hero" data-shape="boll" data-shape-top>
+    <div class="hero-ground" aria-hidden="true">
+      <img src="./assets/images/web/cotton-field-rows.jpg" alt="" loading="eager">
     </div>
-    <div class="hero-overlay"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
 
     <div class="hero-content">
       <div class="hero-badge">
@@ -133,23 +146,23 @@
   </section>
 
   <!-- ==================== DUAL BRANDS ==================== -->
-  <section class="section brands" id="companies">
+  <section class="section brands" id="companies" data-shape="duo">
     <div class="container">
-      <div class="fade-in-js" style="text-align:center; margin-bottom: var(--space-10);">
+      <div class="section-head reveal" data-reveal>
         <p class="section-label" data-en="Our Companies" data-ru="Наши компании">Our Companies</p>
-        <h2 class="section-title" style="margin-inline:auto;" data-en="Two Pillars, One Legacy" data-ru="Два столпа, одно наследие">Two Pillars, One Legacy</h2>
-        <div class="divider" style="margin-inline:auto;"></div>
-        <p class="section-desc" 
-          style="margin-inline:auto;" 
-          data-en="Zarrin and Saffir operate in synergy — one cultivates premium cotton, the other brings it to global markets." 
+        <h2 class="section-title" data-en="Two Pillars, One Legacy" data-ru="Два столпа, одно наследие">Two Pillars, One Legacy</h2>
+        <div class="divider"></div>
+        <p class="section-desc"
+          data-en="Zarrin and Saffir operate in synergy — one cultivates premium cotton, the other brings it to global markets."
           data-ru="Заррин и Саффир работают в синергии — одна выращивает премиальный хлопок, другая выводит его на мировые рынки.">Zarrin and Saffir operate in synergy — one cultivates premium cotton, the other brings it to global markets.</p>
       </div>
 
       <div class="brands-grid">
         <!-- Saffir Card -->
-        <div class="brand-card brand-card-saffir fade-in-js">
+        <div class="brand-card brand-card-saffir enter-left" data-reveal data-tilt>
+          <div class="brand-card-shine" aria-hidden="true"></div>
           <div class="brand-card-icon">
-            <img src="./assets/images/saffir-logo.png" alt="Saffir Logo">
+            <img src="./assets/images/web/saffir-logo.png" alt="Saffir Logo">
           </div>
           <h3>LLC SGF "Saffir"</h3>
           <span class="brand-card-type" data-en="Production Company" data-ru="Производственная компания">Production Company</span>
@@ -167,13 +180,14 @@
         </div>
 
         <!-- Zarrin Card -->
-        <div class="brand-card brand-card-zarrin fade-in-js">
+        <div class="brand-card brand-card-zarrin enter-right" data-reveal data-tilt>
+          <div class="brand-card-shine" aria-hidden="true"></div>
           <div class="brand-card-icon">
-            <img src="./assets/images/zarrin-logo.png" alt="Zarrin Logo">
+            <img src="./assets/images/web/zarrin-logo.png" alt="Zarrin Logo">
           </div>
           <h3>Trade Company "Zarrin"</h3>
           <span class="brand-card-type" data-en="Trading Company" data-ru="Трейдинговая компания">Trading Company</span>
-          <p data-en="The international trading arm connecting Tajikistan's finest cotton with global markets. Zarrin handles procurement, quality assurance, logistics, and distribution to clients worldwide." 
+          <p data-en="The international trading arm connecting Tajikistan's finest cotton with global markets. Zarrin handles procurement, quality assurance, logistics, and distribution to clients worldwide."
             data-ru="Международное торговое подразделение, связывающее лучший хлопок Таджикистана с мировыми рынками. Заррин отвечает за закупки, контроль качества, логистику и дистрибуцию.">The international trading arm connecting Tajikistan's finest cotton with global markets. Zarrin handles procurement, quality assurance, logistics, and distribution to clients worldwide.</p>
           <div class="brand-card-stats">
             <div class="stat-item">
@@ -191,88 +205,112 @@
   </section>
 
   <!-- ==================== ABOUT / MISSION ==================== -->
-  <section class="section" id="about">
+  <section class="section about" id="about" data-shape="field">
     <div class="container">
       <div class="about-grid">
-        <div class="about-image fade-in-js">
-          <img src="./assets/images/cotton-field-blue.jpg" alt="Cotton fields in Tajikistan" loading="lazy">
+        <div class="about-image enter-depth" data-reveal data-tilt>
+          <img src="./assets/images/web/cotton-field-blue.jpg" alt="Cotton fields in Tajikistan" loading="lazy">
+          <div class="about-image-frame" aria-hidden="true"></div>
         </div>
-        <div class="fade-in-js">
+        <div class="about-text reveal" data-reveal>
           <p class="section-label" data-en="Our Mission" data-ru="Наша миссия">Our Mission</p>
           <h2 class="section-title" data-en="Rooted in Tradition, Growing for&nbsp;Tomorrow" data-ru="Укоренены в традициях, растём для&nbsp;будущего">Rooted in Tradition, Growing for&nbsp;Tomorrow</h2>
           <div class="divider"></div>
-          <p class="section-desc" style="margin-bottom: var(--space-4);" 
-            data-en="For generations, cotton has been the white gold of Tajikistan. Our companies continue this proud heritage with modern agricultural practices, international quality standards, and a commitment to sustainable growth." 
+          <p class="section-desc" style="margin-bottom: var(--space-4);"
+            data-en="For generations, cotton has been the white gold of Tajikistan. Our companies continue this proud heritage with modern agricultural practices, international quality standards, and a commitment to sustainable growth."
             data-ru="На протяжении поколений хлопок был белым золотом Таджикистана. Наши компании продолжают это гордое наследие с помощью современных сельскохозяйственных практик, международных стандартов качества и приверженности устойчивому развитию.">For generations, cotton has been the white gold of Tajikistan. Our companies continue this proud heritage with modern agricultural practices, international quality standards, and a commitment to sustainable growth.</p>
-          <p class="section-desc" 
-            data-en="With operations spanning over 20,000 hectares across two key districts, we are building a fully integrated cotton ecosystem — from seed to fiber, from field to factory." 
+          <p class="section-desc"
+            data-en="With operations spanning over 20,000 hectares across two key districts, we are building a fully integrated cotton ecosystem — from seed to fiber, from field to factory."
             data-ru="С операциями на более чем 20 000 гектарах в двух ключевых районах мы создаём полностью интегрированную хлопковую экосистему — от семени до волокна, от поля до фабрики.">With operations spanning over 20,000 hectares across two key districts, we are building a fully integrated cotton ecosystem — from seed to fiber, from field to factory.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== FULL-BLEED IMAGE ==================== -->
-  <div style="width:100%; height: 50vh; overflow:hidden; position: relative;">
-    <img src="./assets/images/cotton-harvest.jpg" alt="Cotton harvesting" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
-    <div style="position:absolute; inset:0; background: linear-gradient(to bottom, var(--color-bg), transparent 20%, transparent 80%, var(--color-surface-2));"></div>
+  <!-- ==================== FULL-BLEED IMAGE (3D window) ==================== -->
+  <div class="depth-window" data-reveal>
+    <div class="depth-window-inner">
+      <img src="./assets/images/web/cotton-harvest.jpg" alt="Cotton harvesting" loading="lazy">
+    </div>
   </div>
 
-  <!-- ==================== PROCESS ==================== -->
-  <section class="section process" id="process">
-    <div class="container">
-      <div class="fade-in-js" style="text-align:center; margin-bottom: var(--space-4);">
-        <p class="section-label" data-en="Value Chain" data-ru="Цепочка создания стоимости">Value Chain</p>
-        <h2 class="section-title" style="margin-inline:auto;" data-en="From Cotton Sowing to Finished Product" data-ru="От посева хлопка до готовой продукции">From Cotton Sowing to Finished Product</h2>
-        <div class="divider" style="margin-inline:auto;"></div>
-      </div>
+  <!-- ==================== PROCESS (pinned 3D slides) ==================== -->
+  <section class="process" id="process">
+    <div class="process-track" data-pin>
+      <span class="process-marker" data-shape="field" data-place="field-side" data-shape-top></span>
+      <span class="process-marker" data-shape="gin" data-shape-top></span>
+      <span class="process-marker" data-shape="spin" data-shape-top></span>
+      <span class="process-marker" data-shape="weave" data-shape-top></span>
 
-      <div class="process-steps">
-        <div class="process-step fade-in-js">
-          <div class="step-number">01</div>
-          <h4 data-en="Cultivation" data-ru="Выращивание">Cultivation</h4>
-          <p data-en="Cotton cultivation on our extensive fields in the subtropical climate of southern Tajikistan. Careful soil preparation and seed selection for optimal yield." data-ru="Выращивание хлопка на наших обширных полях в субтропическом климате южного Таджикистана. Тщательная подготовка почвы и отбор семян для оптимальной урожайности.">Cotton cultivation on our extensive fields in the subtropical climate of southern Tajikistan. Careful soil preparation and seed selection for optimal yield.</p>
-        </div>
+      <div class="process-stage">
+        <div class="container process-layout">
+          <div class="process-copy">
+            <div class="process-head">
+              <p class="section-label" data-en="Value Chain" data-ru="Цепочка создания стоимости">Value Chain</p>
+              <h2 class="section-title" data-en="From Cotton Sowing to Finished Product" data-ru="От посева хлопка до готовой продукции">From Cotton Sowing to Finished Product</h2>
+              <div class="divider"></div>
+            </div>
 
-        <div class="process-step fade-in-js">
-          <div class="step-number">02</div>
-          <h4 data-en="Cotton Ginning" data-ru="Джинирование">Cotton Ginning</h4>
-          <p data-en="Separation of cotton fiber from seeds using modern ginning facilities. Quality control at every stage ensures premium grade output." data-ru="Отделение хлопкового волокна от семян с использованием современного джинирования. Контроль качества на каждом этапе обеспечивает продукцию премиум-класса.">Separation of cotton fiber from seeds using modern ginning facilities. Quality control at every stage ensures premium grade output.</p>
-        </div>
+            <div class="process-drum">
+              <div class="process-step">
+                <div class="step-number">01</div>
+                <h4 data-en="Cultivation" data-ru="Выращивание">Cultivation</h4>
+                <p data-en="Cotton cultivation on our extensive fields in the subtropical climate of southern Tajikistan. Careful soil preparation and seed selection for optimal yield." data-ru="Выращивание хлопка на наших обширных полях в субтропическом климате южного Таджикистана. Тщательная подготовка почвы и отбор семян для оптимальной урожайности.">Cotton cultivation on our extensive fields in the subtropical climate of southern Tajikistan. Careful soil preparation and seed selection for optimal yield.</p>
+              </div>
 
-        <div class="process-step fade-in-js">
-          <div class="step-number">03</div>
-          <h4 data-en="Spinning" data-ru="Прядение">Spinning</h4>
-          <p data-en="State-of-the-art spinning factories transform raw cotton fiber into high-quality yarn, ready for textile manufacturing." data-ru="Современные прядильные фабрики превращают хлопковое волокно в высококачественную пряжу, готовую для текстильного производства.">State-of-the-art spinning factories transform raw cotton fiber into high-quality yarn, ready for textile manufacturing.</p>
-        </div>
+              <div class="process-step">
+                <div class="step-number">02</div>
+                <h4 data-en="Cotton Ginning" data-ru="Джинирование">Cotton Ginning</h4>
+                <p data-en="Separation of cotton fiber from seeds using modern ginning facilities. Quality control at every stage ensures premium grade output." data-ru="Отделение хлопкового волокна от семян с использованием современного джинирования. Контроль качества на каждом этапе обеспечивает продукцию премиум-класса.">Separation of cotton fiber from seeds using modern ginning facilities. Quality control at every stage ensures premium grade output.</p>
+              </div>
 
-        <div class="process-step fade-in-js">
-          <div class="step-number">04</div>
-          <h4 data-en="Weaving & Knitting" data-ru="Ткачество и вязание">Weaving & Knitting</h4>
-          <p data-en="The final stage — transforming yarn into finished fabrics through advanced weaving and knitting production lines." data-ru="Финальный этап — превращение пряжи в готовые ткани с помощью передовых линий ткачества и вязания.">The final stage — transforming yarn into finished fabrics through advanced weaving and knitting production lines.</p>
+              <div class="process-step">
+                <div class="step-number">03</div>
+                <h4 data-en="Spinning" data-ru="Прядение">Spinning</h4>
+                <p data-en="State-of-the-art spinning factories transform raw cotton fiber into high-quality yarn, ready for textile manufacturing." data-ru="Современные прядильные фабрики превращают хлопковое волокно в высококачественную пряжу, готовую для текстильного производства.">State-of-the-art spinning factories transform raw cotton fiber into high-quality yarn, ready for textile manufacturing.</p>
+              </div>
+
+              <div class="process-step">
+                <div class="step-number">04</div>
+                <h4 data-en="Weaving & Knitting" data-ru="Ткачество и вязание">Weaving & Knitting</h4>
+                <p data-en="The final stage — transforming yarn into finished fabrics through advanced weaving and knitting production lines." data-ru="Финальный этап — превращение пряжи в готовые ткани с помощью передовых линий ткачества и вязания.">The final stage — transforming yarn into finished fabrics through advanced weaving and knitting production lines.</p>
+              </div>
+            </div>
+
+            <div class="process-rail" aria-hidden="true">
+              <span class="process-rail-fill"></span>
+              <i>01</i><i>02</i><i>03</i><i>04</i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ==================== CERTIFICATIONS ==================== -->
-  <section class="section" id="certifications">
+  <section class="section certifications" id="certifications" data-shape="rings">
     <div class="container">
-      <div class="fade-in-js" style="text-align:center;">
+      <div class="section-head reveal" data-reveal>
         <p class="section-label" data-en="Quality Standards" data-ru="Стандарты качества">Quality Standards</p>
-        <h2 class="section-title" style="margin-inline:auto;" data-en="Internationally Certified" data-ru="Международная сертификация">Internationally Certified</h2>
-        <div class="divider" style="margin-inline:auto;"></div>
-        <p class="section-desc" style="margin-inline:auto;" data-en="Both Zarrin and Saffir hold prestigious international certifications, affirming our commitment to sustainable and ethical cotton production." data-ru="Заррин и Саффир имеют престижные международные сертификаты, подтверждающие нашу приверженность устойчивому и этичному производству хлопка.">Both Zarrin and Saffir hold prestigious international certifications, affirming our commitment to sustainable and ethical cotton production.</p>
+        <h2 class="section-title" data-en="Internationally Certified" data-ru="Международная сертификация">Internationally Certified</h2>
+        <div class="divider"></div>
+        <p class="section-desc" data-en="Both Zarrin and Saffir hold prestigious international certifications, affirming our commitment to sustainable and ethical cotton production." data-ru="Заррин и Саффир имеют престижные международные сертификаты, подтверждающие нашу приверженность устойчивому и этичному производству хлопка.">Both Zarrin and Saffir hold prestigious international certifications, affirming our commitment to sustainable and ethical cotton production.</p>
       </div>
 
-      <div class="certs-row fade-in-js">
-        <div class="cert-item">
-          <div class="cert-badge cert-bci" src="assets/images/better-cotton-seeklogo.png"></div>
+      <div class="certs-row">
+        <div class="cert-item" data-reveal>
+          <div class="cert-coin cert-bci">
+            <div class="cert-face cert-front"><img src="./assets/images/web/better-cotton-seeklogo.png" alt="Better Cotton logo" loading="lazy"></div>
+            <div class="cert-face cert-back" aria-hidden="true">BCI</div>
+          </div>
           <span class="cert-label">Better Cotton Initiative</span>
           <span class="cert-desc" data-en="Sustainable cotton farming practices" data-ru="Устойчивые практики хлопководства">Sustainable cotton farming practices</span>
         </div>
-        <div class="cert-item">
-          <div class="cert-badge cert-gots" src="assets/images/pngwing.com.png"></div>
+        <div class="cert-item" data-reveal>
+          <div class="cert-coin cert-gots">
+            <div class="cert-face cert-front"><img src="./assets/images/web/pngwing.com.png" alt="GOTS logo" loading="lazy"></div>
+            <div class="cert-face cert-back" aria-hidden="true">GOTS</div>
+          </div>
           <span class="cert-label">Global Organic Textile Standard</span>
           <span class="cert-desc" data-en="Organic cotton certification" data-ru="Сертификация органического хлопка">Organic cotton certification</span>
         </div>
@@ -281,19 +319,19 @@
   </section>
 
   <!-- ==================== REGIONS ==================== -->
-  <section class="section regions" id="regions">
+  <section class="section regions" id="regions" data-shape="terrain">
     <div class="container">
-      <div class="fade-in-js" style="text-align:center; margin-bottom: var(--space-4);">
+      <div class="section-head reveal" data-reveal>
         <p class="section-label" data-en="Our Regions" data-ru="Наши регионы">Our Regions</p>
-        <h2 class="section-title" style="margin-inline:auto;" data-en="Operating in Prime Cotton Territory" data-ru="Работаем в лучших хлопковых районах">Operating in Prime Cotton Territory</h2>
-        <div class="divider" style="margin-inline:auto;"></div>
+        <h2 class="section-title" data-en="Operating in Prime Cotton Territory" data-ru="Работаем в лучших хлопковых районах">Operating in Prime Cotton Territory</h2>
+        <div class="divider"></div>
       </div>
 
       <div class="regions-grid">
         <!-- Yovon -->
-        <div class="region-card fade-in-js">
+        <div class="region-card region-yovon enter-up" data-reveal data-tilt>
           <h4>Yovon</h4>
-          <p style="color: var(--color-primary); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: var(--space-4);" data-en="LLC SGF Saffir — 54 km from capital" data-ru="ООО СГФ Саффир — 54 км от столицы">LLC SGF Saffir — 54 km from capital</p>
+          <p class="region-sub" data-en="LLC SGF Saffir — 54 km from capital" data-ru="ООО СГФ Саффир — 54 км от столицы">LLC SGF Saffir — 54 km from capital</p>
           <div class="region-stats">
             <div class="region-stat">
               <div class="region-stat-value">248,100</div>
@@ -315,9 +353,9 @@
         </div>
 
         <!-- Farkhor -->
-        <div class="region-card fade-in-js">
+        <div class="region-card region-farkhor enter-up" data-reveal data-tilt>
           <h4>Farkhor</h4>
-          <p style="color: var(--color-accent); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: var(--space-4);" data-en="Trade Company Zarrin — 150 km from capital" data-ru="Торговая компания Заррин — 150 км от столицы">Trade Company Zarrin — 150 km from capital</p>
+          <p class="region-sub" data-en="Trade Company Zarrin — 150 km from capital" data-ru="Торговая компания Заррин — 150 км от столицы">Trade Company Zarrin — 150 km from capital</p>
           <div class="region-stats">
             <div class="region-stat">
               <div class="region-stat-value">200,000</div>
@@ -341,51 +379,39 @@
     </div>
   </section>
 
-  <!-- ==================== GALLERY ==================== -->
-  <section class="section gallery">
-    <div class="container">
-      <div class="fade-in-js" style="text-align:center; margin-bottom: var(--space-4);">
-        <p class="section-label" data-en="Gallery" data-ru="Галерея">Gallery</p>
-        <h2 class="section-title" style="margin-inline:auto;" data-en="The Beauty of Cotton" data-ru="Красота хлопка">The Beauty of Cotton</h2>
-        <div class="divider" style="margin-inline:auto;"></div>
-      </div>
+  <!-- ==================== GALLERY (pinned 3D ring) ==================== -->
+  <section class="gallery" id="gallery">
+    <div class="gallery-track" data-pin data-shape="dust">
+      <div class="gallery-stage">
+        <div class="section-head gallery-head">
+          <p class="section-label" data-en="Gallery" data-ru="Галерея">Gallery</p>
+          <h2 class="section-title" data-en="The Beauty of Cotton" data-ru="Красота хлопка">The Beauty of Cotton</h2>
+          <div class="divider"></div>
+        </div>
 
-      <div class="gallery-grid">
-        <div class="gallery-item tall">
-          <img src="./assets/images/cotton-closeup-art.jpg" alt="Cotton closeup" loading="lazy">
-        </div>
-        <div class="gallery-item">
-          <img src="./assets/images/cotton-bolls-soft.jpg" alt="Cotton bolls" loading="lazy">
-        </div>
-        <div class="gallery-item">
-          <img src="./assets/images/cotton-field-rows.jpg" alt="Cotton rows" loading="lazy">
-        </div>
-        <div class="gallery-item">
-          <img src="./assets/images/cotton-texture-1.jpg" alt="Cotton texture" loading="lazy">
-        </div>
-        <div class="gallery-item">
-          <img src="./assets/images/cotton-texture-2.jpg" alt="Cotton field" loading="lazy">
-        </div>
-        <div class="gallery-item">
-          <img src="./assets/images/cotton-texture-3.jpg" alt="Cotton harvest" loading="lazy">
-        </div>
-        <div class="gallery-item">
-          <img src="./assets/images/cotton-field-wide.jpg" alt="Cotton field wide" loading="lazy">
-        </div>
-        <div class="gallery-item">
-          <img src="./assets/images/cotton-texture-4.jpg" alt="Cotton plants" loading="lazy">
+        <div class="gallery-scene">
+          <div class="gallery-ring">
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-closeup-art.jpg" alt="Cotton closeup" loading="lazy"></figure>
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-bolls-soft.jpg" alt="Cotton bolls" loading="lazy"></figure>
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-field-rows.jpg" alt="Cotton rows" loading="lazy"></figure>
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-texture-1.jpg" alt="Cotton texture" loading="lazy"></figure>
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-texture-2.jpg" alt="Cotton field" loading="lazy"></figure>
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-texture-3.jpg" alt="Cotton harvest" loading="lazy"></figure>
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-field-wide.jpg" alt="Cotton field wide" loading="lazy"></figure>
+            <figure class="gallery-item"><img src="./assets/images/web/cotton-texture-4.jpg" alt="Cotton plants" loading="lazy"></figure>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ==================== PROJECT / EXPANSION BANNER ==================== -->
-  <section class="project-banner" id="project">
-    <div class="project-banner-bg">
-      <img src="./assets/images/cotton-harvest.jpg" alt="Expansion project" loading="lazy">
+  <section class="project-banner" id="project" data-shape="globe">
+    <div class="project-banner-bg" data-reveal>
+      <img src="./assets/images/web/cotton-harvest.jpg" alt="Expansion project" loading="lazy">
     </div>
     <div class="project-banner-overlay"></div>
-    <div class="project-content fade-in-js">
+    <div class="project-content reveal" data-reveal>
       <p class="section-label" data-en="Expansion" data-ru="Расширение">Expansion</p>
       <h2 data-en="Building the Future of&nbsp;Cotton" data-ru="Строим будущее&nbsp;хлопка">Building the Future of&nbsp;Cotton</h2>
       <p data-en="Saffir is actively expanding its production capacity with new state-of-the-art facilities including cotton ginning plants, spinning factories, and weaving production lines — creating a fully integrated textile production chain right here in Tajikistan." data-ru="Саффир активно расширяет производственные мощности с новыми современными объектами, включая хлопкоочистительные заводы, прядильные фабрики и линии ткачества — создавая полностью интегрированную текстильную производственную цепочку прямо здесь, в Таджикистане.">Saffir is actively expanding its production capacity with new state-of-the-art facilities including cotton ginning plants, spinning factories, and weaving production lines — creating a fully integrated textile production chain right here in Tajikistan.</p>
@@ -411,17 +437,17 @@
   </section>
 
   <!-- ==================== CONTACT ==================== -->
-  <section class="section contact" id="contact">
+  <section class="section contact" id="contact" data-shape="globe" data-place="globe-wide">
     <div class="container">
-      <div class="fade-in-js" style="text-align:center; margin-bottom: var(--space-4);">
+      <div class="section-head reveal" data-reveal>
         <p class="section-label" data-en="Contact" data-ru="Контакт">Contact</p>
-        <h2 class="section-title" style="margin-inline:auto;" data-en="Let's Work Together" data-ru="Давайте сотрудничать">Let's Work Together</h2>
-        <div class="divider" style="margin-inline:auto;"></div>
-        <p class="section-desc" style="margin-inline:auto;" data-en="Whether you're a textile manufacturer, a trading partner, or an investor — we'd love to hear from you." data-ru="Являетесь ли вы текстильным производителем, торговым партнёром или инвестором — мы будем рады вашему обращению.">Whether you're a textile manufacturer, a trading partner, or an investor — we'd love to hear from you.</p>
+        <h2 class="section-title" data-en="Let's Work Together" data-ru="Давайте сотрудничать">Let's Work Together</h2>
+        <div class="divider"></div>
+        <p class="section-desc" data-en="Whether you're a textile manufacturer, a trading partner, or an investor — we'd love to hear from you." data-ru="Являетесь ли вы текстильным производителем, торговым партнёром или инвестором — мы будем рады вашему обращению.">Whether you're a textile manufacturer, a trading partner, or an investor — we'd love to hear from you.</p>
       </div>
 
       <div class="contact-grid">
-        <div class="contact-info fade-in-js">
+        <div class="contact-info enter-left" data-reveal>
           <div class="contact-item">
             <div class="contact-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -460,7 +486,7 @@
           </div>
         </div>
 
-        <form class="contact-form fade-in-js" onsubmit="event.preventDefault(); alert('Thank you! We will get back to you soon.');">
+        <form class="contact-form enter-right" data-reveal onsubmit="event.preventDefault(); alert('Thank you! We will get back to you soon.');">
           <div class="form-row">
             <div class="form-group">
               <label for="name" data-en="Your Name" data-ru="Ваше имя">Your Name</label>
@@ -485,16 +511,18 @@
     </div>
   </section>
 
+  </main>
+
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logos">
-            <img src="./assets/images/saffir-logo.png" alt="Saffir" width="40" height="40">
-            <img src="./assets/images/zarrin-logo.png" alt="Zarrin" width="40" height="40">
+            <img src="./assets/images/web/saffir-logo.png" alt="Saffir" width="40" height="40">
+            <img src="./assets/images/web/zarrin-logo.png" alt="Zarrin" width="40" height="40">
           </div>
-          <p data-en="Two companies, one vision — premium cotton production and international trade from the heart of Tajikistan." 
+          <p data-en="Two companies, one vision — premium cotton production and international trade from the heart of Tajikistan."
             data-ru="Две компании, одна миссия — премиальное производство хлопка и международная торговля из сердца Таджикистана.">Two companies, one vision — premium cotton production and international trade from the heart of Tajikistan.</p>
         </div>
         <div class="footer-col">
@@ -525,6 +553,7 @@
 
   <!-- ==================== SCRIPTS ==================== -->
   <script src="./app.js"></script>
+  <script src="./fiber3d.js"></script>
 
 </body>
 </html>
