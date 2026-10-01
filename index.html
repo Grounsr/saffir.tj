@@ -114,6 +114,18 @@
     </div>
   </div>
 
+  <!-- Mobile dock: current section + quick contact -->
+  <div class="mobile-dock" id="mobileDock">
+    <button class="dock-section" type="button" aria-label="Open menu">
+      <svg class="dock-ring" viewBox="0 0 36 36" aria-hidden="true">
+        <circle cx="18" cy="18" r="15.9" pathLength="100" class="dock-ring-track"/>
+        <circle cx="18" cy="18" r="15.9" pathLength="100" class="dock-ring-fill"/>
+      </svg>
+      <span class="dock-text"><span class="dock-count">01/08</span><span class="dock-label">Companies</span></span>
+    </button>
+    <a href="#contact" class="dock-cta" data-en="Contact us" data-ru="Связаться">Contact us</a>
+  </div>
+
   <main>
 
   <!-- ==================== HERO ==================== -->
@@ -137,6 +149,11 @@
         <a href="#companies" class="btn btn-primary" data-en="Discover Our Companies" data-ru="Наши компании">Discover Our Companies</a>
         <a href="#contact" class="btn btn-outline" data-en="Get in Touch" data-ru="Связаться с нами">Get in Touch</a>
       </div>
+    </div>
+
+    <div class="hero-touch-hint" aria-hidden="true">
+      <span class="hero-touch-dot"></span>
+      <span data-en="Touch the fibers" data-ru="Коснитесь волокон">Touch the fibers</span>
     </div>
 
     <div class="hero-scroll">
@@ -376,6 +393,7 @@
           </div>
         </div>
       </div>
+      <div class="regions-dots" aria-hidden="true"><i class="on"></i><i></i></div>
     </div>
   </section>
 
@@ -554,6 +572,7 @@
   <!-- ==================== SCRIPTS ==================== -->
   <script src="./app.js"></script>
   <script src="./fiber3d.js"></script>
+  <script src="./mobile.js"></script>
 
 </body>
 </html>
