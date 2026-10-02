@@ -739,6 +739,9 @@ main, .footer { position: relative; z-index: 1; }
     linear-gradient(to bottom, transparent 60%, var(--color-bg));
 }
 
+/* with the 3D stage the object itself carries the light, so no veil over it */
+.has-webgl .hero-glow { background: linear-gradient(to bottom, transparent 80%, var(--color-bg)); }
+
 .hero-content {
   position: relative;
   z-index: 2;
@@ -2119,7 +2122,7 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 
   .has-webgl .hero-touch-hint {
     position: absolute;
-    top: 33vh;
+    top: 13vh;
     left: 50%;
     z-index: 2;
     display: inline-flex;
