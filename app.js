@@ -182,6 +182,111 @@
   layoutRing();
   addEventListener('resize', layoutRing, { passive: true });
 
+  // light haptic tick on phones that support it (after the first tap only)
+  function buzz(ms) {
+    try {
+      if (navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)) navigator.vibrate(ms || 8);
+    } catch (e) {}
+  }
+  window.saffirBuzz = buzz;
+
+  // ---- GALLERY: swipe to turn the ring, tap a photo to open it ----
+  var galleryScene = document.querySelector('.gallery-scene');
+  var gBase = 0, gDrag = 0, gDragView = 0, gDown = null, gMoved = false, gLastSnap = 0;
+  if (galleryScene && galleryItems.length) {
+    galleryScene.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      gDown = { x: e.clientX, y: e.clientY, d: gDrag };
+      gMoved = false;
+    });
+    addEventListener('pointermove', function (e) {
+      if (!gDown) return;
+      var dx = e.clientX - gDown.x;
+      if (!gMoved && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(e.clientY - gDown.y)) gMoved = true;
+      if (gMoved) gDrag = gDown.d - dx / Math.max(160, galleryItems[0].offsetWidth * 1.1);
+    }, { passive: true });
+    function gEnd() {
+      if (!gDown) return;
+      gDown = null;
+      if (!gMoved) return;
+      var snapped = Math.round(gBase + gDrag);
+      gDrag = snapped - gBase;
+      if (snapped !== gLastSnap) { gLastSnap = snapped; buzz(6); }
+    }
+    addEventListener('pointerup', gEnd);
+    addEventListener('pointercancel', gEnd);
+    // 3D hit-testing is unreliable, so a tap opens whichever photo faces the viewer
+    galleryScene.addEventListener('click', function () {
+      if (gMoved) return;
+      var n = galleryItems.length;
+      openLightbox(((Math.round(gBase + gDragView) % n) + n) % n);
+    });
+  }
+
+  var lightbox = null, lbIndex = 0;
+  function openLightbox(i) {
+    if (!lightbox) {
+      lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      lightbox.setAttribute('role', 'dialog');
+      lightbox.setAttribute('aria-modal', 'true');
+      lightbox.innerHTML = '<img alt=""><button class="lightbox-btn lightbox-prev" aria-label="Previous">&#8249;</button>' +
+        '<button class="lightbox-btn lightbox-next" aria-label="Next">&#8250;</button>' +
+        '<button class="lightbox-btn lightbox-close" aria-label="Close">&times;</button><div class="lightbox-count"></div>';
+      document.body.appendChild(lightbox);
+      lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+      lightbox.querySelector('.lightbox-prev').addEventListener('click', function (e) { e.stopPropagation(); showLightbox(lbIndex - 1); });
+      lightbox.querySelector('.lightbox-next').addEventListener('click', function (e) { e.stopPropagation(); showLightbox(lbIndex + 1); });
+      lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+      var sx = null;
+      lightbox.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+      lightbox.addEventListener('touchend', function (e) {
+        if (sx == null) return;
+        var dx = e.changedTouches[0].clientX - sx;
+        if (Math.abs(dx) > 50) showLightbox(lbIndex + (dx < 0 ? 1 : -1));
+        sx = null;
+      });
+      addEventListener('keydown', function (e) {
+        if (!lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') showLightbox(lbIndex + 1);
+        if (e.key === 'ArrowLeft') showLightbox(lbIndex - 1);
+      });
+    }
+    showLightbox(i);
+    lightbox.classList.add('open');
+    document.documentElement.classList.add('no-scroll');
+    lightbox.querySelector('.lightbox-close').focus({ preventScroll: true });
+  }
+  function showLightbox(i) {
+    var n = galleryItems.length;
+    lbIndex = (i + n) % n;
+    var src = galleryItems[lbIndex].querySelector('img');
+    var img = lightbox.querySelector('img');
+    img.classList.remove('in');
+    void img.offsetWidth;
+    img.src = src.currentSrc || src.src;
+    img.alt = src.alt;
+    img.classList.add('in');
+    lightbox.querySelector('.lightbox-count').textContent = (lbIndex + 1) + ' / ' + n;
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.documentElement.classList.remove('no-scroll');
+  }
+
+  // ---- PROCESS: tap a rail number to jump to that step ----
+  railTicks.forEach(function (tick, idx) {
+    tick.addEventListener('click', function () {
+      if (!processTrack) return;
+      var top = processTrack.getBoundingClientRect().top + scrollY;
+      var range = processTrack.offsetHeight - innerHeight;
+      var n = railTicks.length;
+      scrollTo({ top: top + range * (idx / (n - 1)) * 0.98 + 2, behavior: 'smooth' });
+    });
+  });
+  var lastActiveStep = 0;
+
   tilts.forEach(function (t) {
     t.el.addEventListener('pointermove', function (e) {
       if (e.pointerType !== 'mouse' || reduceMotion) return;
@@ -225,7 +330,8 @@
       if (!reduceMotion) {
         var rect = R.el.getBoundingClientRect();
         if (rect.bottom < -vh || rect.top > vh * 2) continue;
-        var target = clamp((vh - rect.top) / (vh * 0.55), 0, 1);
+        // phones: finish the reveal sooner so text isn't half-faded mid-screen
+        var target = clamp((vh - rect.top) / (vh * (innerWidth < 768 ? 0.3 : 0.55)), 0, 1);
         R.q = lerp(R.q, target, k);
         if (Math.abs(R.q - target) < 0.001) R.q = target;
       }
@@ -267,6 +373,7 @@
       if (railFill) railFill.style.transform = 'scaleY(' + (s / (n - 1)).toFixed(4) + ')';
       var active = Math.round(s);
       railTicks.forEach(function (t, idx) { t.classList.toggle('on', idx <= active); });
+      if (active !== lastActiveStep) { lastActiveStep = active; buzz(8); }
     }
 
     // gallery: rotating 3D ring
@@ -277,7 +384,9 @@
       pinState.set(galleryTrack, gs);
       var count = galleryItems.length;
       var step = 360 / count;
-      var angle = -gs * step * (count - 1);
+      gBase = gs * (count - 1);
+      gDragView = lerp(gDragView, gDrag, gDown ? 0.5 : k * 0.6);
+      var angle = -(gBase + gDragView) * step;
       galleryRing.style.transform = 'translateZ(' + (-ringRadius) + 'px) rotateX(-4deg) rotateY(' + angle.toFixed(2) + 'deg)';
       galleryItems.forEach(function (item, idx) {
         var rel = ((idx * step + angle) % 360 + 540) % 360 - 180;

@@ -754,6 +754,8 @@
   // ---------- animation state ----------
   var smoothY = scrollY;
   var mouseX = 0, mouseY = 0, mx = 0, my = 0, px = 0, py = 0, mouseOn = 0, mouseTarget = 0;
+  // where the fibers part: the cursor on desktop, the finger on phones
+  var pushX = 0, pushY = 0;
   var angle = 0, lastNow = performance.now(), time = 0;
   var needsFrame = true;
   var visible = true;
@@ -773,14 +775,14 @@
     if (!visible) return;
 
     var targetY = scrollY;
-    var moving = Math.abs(targetY - smoothY) > 0.5 || Math.abs(mouseX - mx) > 0.001 || Math.abs(mouseY - my) > 0.001;
+    var moving = Math.abs(targetY - smoothY) > 0.5 || Math.abs(mouseX - mx) > 0.001 || Math.abs(mouseY - my) > 0.001 || Math.abs(pushX - px) > 0.001 || Math.abs(pushY - py) > 0.001;
     if (reduceMotion && !moving && !needsFrame) return;
 
     smoothY = reduceMotion ? targetY : lerp(smoothY, targetY, 1 - Math.pow(0.0009, dt));
     mx = lerp(mx, mouseX, 1 - Math.pow(0.02, dt));
     my = lerp(my, mouseY, 1 - Math.pow(0.02, dt));
-    px = lerp(px, mouseX, 1 - Math.pow(0.0005, dt));
-    py = lerp(py, mouseY, 1 - Math.pow(0.0005, dt));
+    px = lerp(px, pushX, 1 - Math.pow(0.0005, dt));
+    py = lerp(py, pushY, 1 - Math.pow(0.0005, dt));
     mouseOn = lerp(mouseOn, reduceMotion ? 0 : mouseTarget, 1 - Math.pow(0.05, dt));
     if (!reduceMotion) time += dt;
 
@@ -825,7 +827,11 @@
     gl.uniform3fv(loc.uC2, pal.c2);
 
     // hero fade-in on first load and a gentle dim on small screens behind text
-    var alpha = pl.a * pal.gain * (narrow ? 0.7 : 1) * intro;
+    // on phones the shape sits behind body copy: full strength in the hero, softer below
+    var heroK = Math.max(0, Math.min(1, 1 - smoothY / H));
+    // mid-morph the fibers spread over the copy, so they thin out on phones
+    var morphDim = narrow ? 1 - 0.45 * Math.sin(t * Math.PI) : 1;
+    var alpha = pl.a * pal.gain * (narrow ? lerp(0.45, 0.8, heroK) : 1) * morphDim * intro;
     gl.uniform1f(loc.uAlpha, alpha);
     gl.uniform1f(loc.uSize, (narrow ? 34 : 40) * dpr * Math.sqrt(H / 900) * (lowPower ? 1.15 : 1));
     gl.uniform1f(loc.uCamZ, CAMZ);
@@ -851,10 +857,38 @@
   if ('ResizeObserver' in window) new ResizeObserver(function () { measure(); }).observe(document.body);
   addEventListener('pointermove', function (e) {
     if (e.pointerType !== 'mouse') return;
-    mouseX = (e.clientX / innerWidth) * 2 - 1;
-    mouseY = (e.clientY / innerHeight) * 2 - 1;
+    mouseX = pushX = (e.clientX / innerWidth) * 2 - 1;
+    mouseY = pushY = (e.clientY / innerHeight) * 2 - 1;
     mouseTarget = 1;
   }, { passive: true });
+
+  // Touch: a finger parts the fibers as it moves, even while scrolling
+  function onTouch(e) {
+    var t = e.touches[0];
+    if (!t) return;
+    var nx = (t.clientX / innerWidth) * 2 - 1, ny = (t.clientY / innerHeight) * 2 - 1;
+    if (mouseTarget === 0) { px = nx; py = ny; } // start where the finger lands
+    pushX = nx; pushY = ny;
+    mouseTarget = 1;
+    if (!touched) { touched = true; document.documentElement.classList.add('fibers-touched'); }
+  }
+  var touched = false;
+  addEventListener('touchstart', onTouch, { passive: true });
+  addEventListener('touchmove', onTouch, { passive: true });
+  addEventListener('touchend', function (e) { if (!e.touches.length) mouseTarget = 0; }, { passive: true });
+  addEventListener('touchcancel', function () { mouseTarget = 0; }, { passive: true });
+
+  // Tilting the phone turns the shape (where the browser allows it without a prompt)
+  if (isSmall && !reduceMotion && 'DeviceOrientationEvent' in window && typeof DeviceOrientationEvent.requestPermission !== 'function') {
+    var base = null;
+    addEventListener('deviceorientation', function (e) {
+      if (e.gamma == null || e.beta == null) return;
+      if (!base) base = { g: e.gamma, b: e.beta };
+      base.b = lerp(base.b, e.beta, 0.01); // slowly re-centre to how the phone is held
+      mouseX = Math.max(-1, Math.min(1, (e.gamma - base.g) / 30));
+      mouseY = Math.max(-1, Math.min(1, (e.beta - base.b) / 30));
+    }, { passive: true });
+  }
   document.documentElement.addEventListener('mouseleave', function () { mouseTarget = 0; });
   document.addEventListener('visibilitychange', function () { visible = !document.hidden; lastNow = performance.now(); });
   new MutationObserver(function () { needsFrame = true; }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
