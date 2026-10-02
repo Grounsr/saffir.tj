@@ -1,0 +1,12 @@
+{
+  "name": "saffir-site",
+  "private": true,
+  "description": "Static site. Only the 3D scene is bundled: npm install && npm run build",
+  "scripts": {
+    "build": "esbuild src/scene3d.js --bundle --minify --format=iife --target=es2019 --legal-comments=none --outfile=scene3d.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "three": "0.170.0"
+  }
+}
