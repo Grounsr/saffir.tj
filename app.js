@@ -154,6 +154,9 @@
   var processTrack = document.querySelector('.process-track');
   var processSteps = Array.prototype.slice.call(document.querySelectorAll('.process-step'));
   var railFill = document.querySelector('.process-rail-fill');
+  var deckCards = Array.prototype.slice.call(document.querySelectorAll('.pv-card'));
+  var heroStack = document.querySelector('.hero-stack');
+  var stackT = { x: 0, y: 0 }, stackV = { x: 0, y: 0 }, mouseSeen = false;
   var railTicks = Array.prototype.slice.call(document.querySelectorAll('.process-rail i'));
   var galleryTrack = document.querySelector('.gallery-track');
   var galleryRing = document.querySelector('.gallery-ring');
@@ -299,6 +302,14 @@
     t.el.addEventListener('pointerleave', function () { t.tx = 0; t.ty = 0; });
   });
 
+  // hero photo stack follows the mouse; on touch screens it drifts on its own
+  addEventListener('pointermove', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    mouseSeen = true;
+    stackT.x = clamp(e.clientX / innerWidth * 2 - 1, -1, 1);
+    stackT.y = clamp(e.clientY / innerHeight * 2 - 1, -1, 1);
+  }, { passive: true });
+
   var pinState = new Map();
   function pinProgress(el) {
     var r = el.getBoundingClientRect();
@@ -354,6 +365,20 @@
 
     if (reduceMotion) return;
 
+    // hero photo stack
+    if (heroStack && y < vh * 1.2) {
+      if (!mouseSeen) {
+        var t = now / 1000;
+        stackT.x = Math.sin(t * 0.45) * 0.55;
+        stackT.y = Math.cos(t * 0.35) * 0.35;
+      }
+      var ks = 1 - Math.pow(0.02, dt);
+      stackV.x = lerp(stackV.x, stackT.x, ks);
+      stackV.y = lerp(stackV.y, stackT.y, ks);
+      heroStack.style.setProperty('--px', stackV.x.toFixed(3));
+      heroStack.style.setProperty('--py', stackV.y.toFixed(3));
+    }
+
     // process: 3D drum of slides
     if (processTrack) {
       var pp = pinProgress(processTrack);
@@ -369,6 +394,25 @@
         el.style.transform = 'translate3d(0,' + (d * 46).toFixed(2) + '%,' + (-ad * 140).toFixed(1) + 'px) rotateX(' + (-d * 70).toFixed(2) + 'deg)';
         el.style.opacity = o.toFixed(3);
         el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
+      });
+      // photo deck: the current photo flies past the viewer, the next ones wait behind
+      deckCards.forEach(function (el, idx) {
+        var d = idx - s, tf, o, dim = 0;
+        if (d <= 0) {
+          var a = -d;
+          tf = 'translate3d(' + (-a * 4).toFixed(2) + '%,' + (-a * 16).toFixed(2) + '%,' + (a * 240).toFixed(1) + 'px) rotateX(' + (a * 14).toFixed(2) + 'deg) rotateY(' + (-a * 8).toFixed(2) + 'deg)';
+          o = clamp(1 - a * 2.4, 0, 1);
+        } else {
+          tf = 'translate3d(' + (d * 6).toFixed(2) + '%,' + (-d * 7).toFixed(2) + '%,' + (-d * 150).toFixed(1) + 'px) rotateZ(' + (d * 2.2).toFixed(2) + 'deg)';
+          o = clamp(2.6 - d, 0, 1);
+          dim = Math.min(d * 0.32, 0.75);
+        }
+        el.style.transform = tf;
+        el.style.opacity = o.toFixed(3);
+        el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
+        el.style.zIndex = String(10 - idx);
+        el.style.setProperty('--dim', dim.toFixed(3));
+        el.style.setProperty('--d', d.toFixed(3));
       });
       if (railFill) railFill.style.transform = 'scaleY(' + (s / (n - 1)).toFixed(4) + ')';
       var active = Math.round(s);
